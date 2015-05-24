@@ -1,0 +1,145 @@
+holharm 0.1.2 
+<c> 2008-2009 by Josep Andreu
+=============================
+
+holharm try to be a smart harmonizer DSSI plugin using the smbPitchShifther
+engine available on http://www.dspdimension.com in periods of 128 frames.
+
+holharm use double harmonizer engine, you can define the interval for each channel.
+
+
+DEPENDENCIES
+=============
+In order to compile you will need:
+
+dssi-dev (DSSI development)
+liblo0-dev (Lightweight OSC development library)
+libfltk1.1-dev (FLTK Fast Ligth Toolkit development)
+
+CAREFULLY
+=========
+
+harmonizer engine quality can be changed on the GUI by the user, unfortunatelly to
+take changes effect you need restart the plugin. But ... CAREFULLY holharm
+makes hard use of your CPU. My recomentation is:
+
+p3 or similar 		 Poor
+p4 or similar 		 Fine
+Dual Core or similar     Good 
+
+Off course that can be change if you have a really tuned computer, for
+example I can use Fine on my p3 933.
+
+If you change the Quality value and your CPU cant afford that, jackd will 
+crash when you start holharm, please read the Known Issues section to solve
+that.
+
+
+MODE OPERATION
+===============
+
+holharm has three mode operation:
+
+Mode Normal
+===========
+
+The interval is fixed by the user in the GUI and runs as a normal harmonizer, usefull to
+change song key, or do some crazy things.
+
+Mode Selected
+=============
+
+(Use ONLY if the input audio signal is a monophonic signal (single voice, single
+flute ...)
+
+In this mode holharm analyzes the input audio signal and try to recognize the musical note, 
+then adjust the interval, using the Intervals, Note and Chord Type selected
+by the user on the GUI.
+
+The Rec Times parameter is the times to validate a new note recognized,
+adjust to get better results.
+
+This is usefull to harmonize small parts of a song that use the same chord.
+
+Mode MIDI
+=========
+
+(Use ONLY if the input audio signal is a monophonic signal (single voice, single 
+flute ...)
+
+In this mode holharm recognizes input MIDI data chords, the recognized chord is
+displayed on the GUI, analyzes the input audio signal and try to recognize
+the musical note and then adjust the interval, using the Intervals selected
+by de user on the GUI and the MIDI chord recognized.
+
+Of course the MIDI data chords need to be synchronized with the audio, you
+can play in realtime if you are a good keyboard player, or write a MIDI track
+on a sequencer and synchronize with the audio, that is easy using jack transport
+using rosegarden or qtractor sequencers. MIDI chord has memory, you only
+need to play/write on instance of the Chord.
+
+Unfortunatelly anyone of the linux sequencers can manage a input Audio/MIDI
+DSSI plugin, almost not today, then if you want to use this mode you need
+to run holharm in a separate dssi host like jack-dssi-host or ghostess, and
+use qjackctl to do the connections.
+
+
+
+Mapped MIDI Controls
+====================
+
+Volume        MIDI Control Message   7
+Pan           MIDI Control Message  10
+Interval L    MIDI Control Message  48
+Interval R    MIDI Control Message  49
+
+
+
+Known Issues
+============
+
+- In Mode Selected or Mode MIDI, holharm use the schmitt algorithm to analyze
+ the input audio data for recognize notes, and is not perfect, holharm 
+ discards many of the algorith return values until has a reasonable result.
+ That produces a delay betwen the harmonized voices and the input signal,
+ that is not so bad in most cases, anyway if the input audio data is detuned,
+ is really hard to recognize notes, then is really important to use a clean/tuned 
+ audio input data.
+
+- If you have selected a great Quality and your CPU is not capable to afford
+  that, the jack server will be stopped each time you start holharm, to
+  solve that remove the file /home/"youruser"/.holharm or edit by hand using
+  the values:
+
+  4 for Poor
+  8 for Fine
+  16 for Good
+
+  That means: on the first line of the file .. put a 4 or 8 or 16 value.
+  Save and restart the plugin.
+
+
+
+Best Results
+============
+
+If you want perfect results, the best way is use a wavetoMIDI program to
+generate a MIDI file with the audio melody track, then edit this MIDI track 
+adding MIDI Control Messages for the Intervals, and synchronize this MIDI
+file with your audio data sending the Interval changes via MIDI Control
+Message to holharm using the Normal mode.
+
+And that's all folks.
+
+Josep
+
+
+
+
+
+
+
+
+
+
+   

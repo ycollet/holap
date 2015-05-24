@@ -1,0 +1,58 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.61)
+AC_INIT([MusicalDelay],[0.1.0],[holborn@telefonica.net])
+AM_INIT_AUTOMAKE(musicaldelay,0.1.0)
+AC_CONFIG_SRCDIR([config.h.in])
+AC_CONFIG_HEADER([config.h])
+
+
+# Checks for programs.
+AC_ENABLE_STATIC(no)
+AC_ENABLE_SHARED(yes)
+AC_PROG_CC
+AC_LIBTOOL_DLOPEN
+AC_PROG_LIBTOOL
+AC_PROG_LD
+AM_PROG_LIBTOOL
+
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-lm':
+
+# Checks for header files.
+AC_CHECK_HEADERS([ladspa.h fcntl.h stdlib.h string.h unistd.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_CHECK_FUNCS([memset strdup])
+
+
+if test "x$prefix" == "xNONE"; then
+prefix=/usr/local
+fi
+
+DATADIR="$prefix/share/${PACKAGE}"
+
+AC_DEFINE_UNQUOTED(DATADIR,"$DATADIR",[DATADIR])
+
+
+SSE=$(cat /proc/cpuinfo | grep sse)
+
+if test -z "$SSE"; then
+SSE=""
+else
+SSE="-msse -mfpmath=sse -ffast-math"
+fi
+
+
+CFLAGS="-fPIC -DPIC -Wall -pipe $SSE -O2 -Wall -ffunction-sections -fomit-frame-pointer -c "
+
+LDFLAGS= 
+
+
+AC_CONFIG_FILES([Makefile src/Makefile metadata/Makefile])
+AC_OUTPUT
+

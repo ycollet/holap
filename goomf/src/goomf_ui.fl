@@ -1,0 +1,586 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0110 
+i18n_type 1 
+i18n_include <libintl.h> 
+i18n_function gettext 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <stdio.h>} {public global
+} 
+
+decl {\#include <stdlib.h>} {public global
+} 
+
+decl {\#include <string.h>} {public global
+} 
+
+decl {\#include "../config.h"} {public global
+} 
+
+decl {\#include <FL/Fl_Shared_Image.H>} {public global
+} 
+
+decl {\#include <FL/Fl_Valuator.H>} {public
+} 
+
+decl {\#include <FL/Fl_Dial.H>} {public
+} 
+
+decl {\#include <FL/Fl_Box.H>} {public
+} 
+
+decl {\#include <FL/fl_draw.H>} {public
+} 
+
+decl {\#include <FL/Fl_File_Chooser.H>} {public
+} 
+
+decl {\#include <FL/x.H>} {public
+} 
+
+class Rueda {: {public Fl_Dial}
+} {
+  decl {char theformat[32];} {public global
+  }
+  decl {Fl_Shared_Image *img;} {public global
+  }
+  decl {Fl_Image *temp;} {public global
+  }
+  Function {Rueda(int x,int y, int w, int h, const char *label=0):Fl_Dial(x,y,w,h,label)} {} {
+    code {char tempfile[128];
+
+sprintf(tempfile,"%s/knob.png",DATADIR);
+
+img = Fl_Shared_Image::get((const char *)tempfile);
+
+if (w != 50) 
+   temp = img->copy(w*51,w);
+   else temp= img;} {}
+  }
+  Function {~Rueda()} {} {
+    code {img ->release();
+delete temp;} {}
+  }
+  Function {draw()} {} {
+    code {int ox,oy,ww,hh;
+int paso;
+char buf[128];
+float val;
+
+ox = x();
+oy = y();
+ww = w();
+hh = h();
+
+
+
+  if (minimum() == maximum())
+    val = 0.5;
+  else {
+    val = (value()-minimum())/(maximum()-minimum());
+     
+    if (val > 1.0) val = 1.0;
+    else if (val < 0.0) val = 0.0;
+  }
+
+
+  paso = (int) (val * 47);
+
+
+if (damage()&FL_DAMAGE_ALL)
+{
+draw_box(box(), ox, oy, ww, hh, color());
+}
+
+
+draw_box(box(), ox, oy, ww, hh, color());
+
+temp->draw(ox,oy,ww,hh,paso*ww,0);
+
+bzero(buf,sizeof(buf));
+
+sprintf(buf,theformat,value());
+
+draw_box(box(),ox,oy+ww,ww,hh-ww, color());
+
+fl_font(FL_HELVETICA, 11);
+
+fl_color(active_r() ? labelcolor() : fl_inactive(labelcolor()));
+
+fl_draw(buf, ox, oy+ww,ww,hh-ww,FL_ALIGN_CLIP);} {}
+  }
+  Function {handle(int  event)} {return_type int
+  } {
+    code {int i=0;
+
+if (event == FL_PUSH && Fl::visible_focus()) {
+    Fl::focus(this);
+    draw();
+} 
+
+
+
+switch (event) 
+	{
+    	              		
+    		 case FL_MOUSEWHEEL :
+                      {
+                      if (Fl::e_dy==0) return 0;
+                      handle_push();
+                      handle_drag(clamp(increment(value(),Fl::e_dy)));
+                      handle_release();
+                      return 1;	
+                      }
+         
+                case FL_FOCUS :
+                case FL_UNFOCUS :
+                      if (Fl::visible_focus()) {
+                      redraw();
+                      return 1;
+                      } else return 0;
+        }
+
+
+ i = Fl_Dial::handle(event);
+ //redraw();
+ 
+ 
+return i;} {}
+  }
+} 
+
+class goomf_ui {open
+} {
+  decl {int Pexitprogram;} {public
+  }
+  decl {int Pexit;} {public
+  }
+  decl {int ready;} {public
+  }
+  decl {int op;} {public
+  }
+  decl {int cop;} {public
+  }
+  decl {int D_Vol_c;} {public
+  }
+  decl {int D_Tune_c;} {public
+  }
+  decl {int D_Portamento_c;} {public
+  }
+  decl {int D_LFO_Volume_c;} {public
+  }
+  decl {int D_LFO_Frequency_c;} {public
+  }
+  decl {int D_LFO_Delay_c;} {public
+  }
+  decl {int D_LFO_Wave_c;} {public
+  }
+  decl {int D_Wave_c[6];} {public
+  }
+  decl {int D_H_c[6];} {public
+  }
+  decl {int D_HF_c[6];} {public
+  }
+  decl {int D_OVol_c[6];} {public
+  }
+  decl {int D_pLFO_c[6];} {public
+  }
+  decl {int D_Attack_c[6];} {public
+  }
+  decl {int D_Decay_c[6];} {public
+  }
+  decl {int D_Sustain_c[6];} {public
+  }
+  decl {int D_Release_c[6];} {public
+  }
+  decl {int D_Ftype_c;} {public
+  }
+  decl {int D_Fgain_c;} {public
+  }
+  decl {int D_Fcutoff_c;} {public
+  }
+  decl {int D_Fq_c;} {public
+  }
+  decl {int D_FLFO_c;} {public
+  }
+  decl {int D_FADSR_c;} {public
+  }
+  decl {int D_Fstages_c;} {public
+  }
+  decl {int D_Fvelocity_c;} {public
+  }
+  decl {int D_Algo_c;} {public
+  }
+  decl {char uBankFilename[255];} {public
+  }
+  decl {int made;} {public
+  }
+  Function {goomf_ui()} {} {
+    code {fl_open_display();
+Fl::visual(FL_DOUBLE|FL_RGB);
+fl_register_images();
+make_window();
+ui_win->xclass("goomf");
+ready=1;
+OP1->value(1);
+ui_win->show();
+void * v=MT;
+Fl::add_timeout(1.0 * 0.04,tick,v);} {}
+  }
+  Function {make_window()} {open
+  } {
+    Fl_Window ui_win {
+      callback {Pexit=1;} selected
+      xywh {321 265 500 580} type Double color 137 visible
+    } {
+      Fl_Menu_Bar {} {open
+        xywh {0 0 500 25} box BORDER_BOX color 138 selection_color 4 labelsize 18 labelcolor 7 textsize 18
+      } {
+        MenuItem {} {
+          label {&New}
+          callback {ready = 6;}
+          xywh {0 0 36 21} shortcut 0x6e labelcolor 7
+        }
+        MenuItem {} {
+          label {&Bank}
+          callback {BankWindow->show();
+if(!made) ready = 5;}
+          xywh {0 0 36 21} shortcut 0x62 labelcolor 7
+        }
+      }
+      Fl_Box d_osc_label {
+        label {OSC Dir}
+        xywh {10 510 480 20} labelsize 11 labelcolor 3
+      }
+      Fl_Box setBankFile {
+        label Default
+        xywh {10 493 480 17} labelsize 11 labelcolor 3
+      }
+      Fl_Box {} {
+        label {<c>2009 by Josep Andreu}
+        xywh {360 558 135 17} labelsize 9 labelcolor 7
+      }
+      Fl_Box {} {
+        label GooMF
+        xywh {375 531 110 29} labelfont 1 labelsize 21 labelcolor 7
+      }
+      Fl_Box MT {
+        xywh {355 129 20 16} labelsize 11
+      }
+      Fl_Dial D_Vol {
+        label Volume
+        callback {D_Vol_c=1;}
+        xywh {10 70 50 60} box FLAT_BOX color 137 labelsize 11 labelcolor 7 align 1 step 0.01 value 1
+        code0 {strcpy(o->theformat,"%1.2f");}
+        class Rueda
+      }
+      Fl_Dial D_Tune {
+        label {Master Tune}
+        callback {D_Tune_c=1;}
+        xywh {80 70 50 60} box FLAT_BOX color 137 labelsize 11 labelcolor 7 align 1 minimum -1 step 0.01
+        code0 {strcpy(o->theformat,"%1.2f");}
+        class Rueda
+      }
+      Fl_Dial D_Portamento {
+        label Portamento
+        callback {D_Portamento_c=1;}
+        xywh {150 70 50 60} box FLAT_BOX color 137 labelsize 11 labelcolor 7 align 1 step 0.01
+        code0 {strcpy(o->theformat,"%1.2f");}
+        class Rueda
+      }
+      Fl_Group {} {
+        label {Operator Parameters}
+        xywh {10 285 480 210} box BORDER_BOX color 138 labelfont 1 labelcolor 5
+      } {
+        Fl_Dial D_Wave {
+          label Wave
+          callback {D_Wave_c[op]=1;}
+          xywh {30 310 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 minimum 1 maximum 9 step 1 value 1
+          code0 {strcpy(o->theformat,"%1.0f");}
+          class Rueda
+        }
+        Fl_Dial D_H {
+          label Harmonic
+          callback {D_H_c[op]=1;}
+          xywh {95 310 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 maximum 21 step 1
+          code0 {strcpy(o->theformat,"%2.0f");}
+          class Rueda
+        }
+        Fl_Dial D_HF {
+          label {H.Fine}
+          callback {D_HF_c[op]=1;}
+          xywh {160 310 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 minimum -0.02 maximum 0.02 step 0.0001
+          code0 {strcpy(o->theformat,"%1.4f");}
+          class Rueda
+        }
+        Fl_Dial D_OVol {
+          label Volume
+          callback {D_OVol_c[op]=1;}
+          xywh {225 310 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 step 0.01
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_pLFO {
+          label pLFO
+          callback {D_pLFO_c[op]=1;}
+          xywh {290 310 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 step 0.01
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_Attack {
+          label Attack
+          callback {D_Attack_c[op]=1;}
+          xywh {30 405 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 minimum 0.01 maximum 4 step 0.01 value 0.01
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_Decay {
+          label Decay
+          callback {D_Decay_c[op]=1;}
+          xywh {95 405 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 minimum 0.01 maximum 4 step 0.01 value 0.01
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_Sustain {
+          label Sustain
+          callback {D_Sustain_c[op]=1;}
+          xywh {160 405 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 step 0.01 value 0.5
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_Release {
+          label Release
+          callback {D_Release_c[op]=1;}
+          xywh {225 405 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 minimum 0.01 step 0.01 value 0.01
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_Algo {
+          label Algorhytm
+          callback {D_Algo_c=1;}
+          xywh {365 405 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 minimum 1 maximum 2 step 1 value 1
+          code0 {strcpy(o->theformat,"%1.0f");}
+          class Rueda
+        }
+        Fl_Group {} {
+          label Selector
+          xywh {365 315 105 65} box BORDER_BOX color 138 labelfont 1 labelcolor 5
+        } {
+          Fl_Button OP1 {
+            label 1
+            callback {if ((int) o->value()==1)
+{
+op=0;
+cop=1;
+}}
+            xywh {375 350 25 20} type Radio box PLASTIC_UP_BOX color 48 selection_color 3 when 1
+          }
+          Fl_Button OP2 {
+            label 2
+            callback {if ((int)o->value()==1)
+{
+op=1;
+cop=1;
+}}
+            xywh {375 325 25 20} type Radio box PLASTIC_UP_BOX color 48 selection_color 3 when 1
+          }
+          Fl_Button OP3 {
+            label 3
+            callback {if ((int)o->value()==1)
+{
+op=2;
+cop=1;
+}}
+            xywh {405 350 25 20} type Radio box PLASTIC_UP_BOX color 48 selection_color 3 when 1
+          }
+          Fl_Button OP4 {
+            label 4
+            callback {if ((int)o->value()==1)
+{
+op=3;
+cop=1;
+}}
+            xywh {405 325 25 20} type Radio box PLASTIC_UP_BOX color 48 selection_color 3 when 1
+          }
+          Fl_Button OP5 {
+            label 5
+            callback {if ((int)o->value()==1)
+{
+op=4;
+cop=1;
+}}
+            xywh {435 350 25 20} type Radio box PLASTIC_UP_BOX color 48 selection_color 3 when 1
+          }
+          Fl_Button OP6 {
+            label 6
+            callback {if ((int)o->value()==1)
+{
+op=5;
+cop=1;
+}}
+            xywh {435 325 25 20} type Radio box PLASTIC_UP_BOX color 48 selection_color 3 when 1
+          }
+        }
+      }
+      Fl_Group LFO {
+        label LFO
+        xywh {225 50 265 100} box BORDER_BOX color 138 labelfont 1 labelcolor 5
+      } {
+        Fl_Dial D_LFO_Frequency {
+          label Frequency
+          callback {D_LFO_Frequency_c=1;}
+          xywh {305 70 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 step 0.01
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_LFO_Volume {
+          label Volume
+          callback {D_LFO_Volume_c=1;}
+          xywh {240 70 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 step 0.01
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_LFO_Delay {
+          label Delay
+          callback {D_LFO_Delay_c=1;}
+          xywh {365 70 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 step 0.01
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_LFO_Wave {
+          label Wave
+          callback {D_LFO_Wave_c=1;}
+          xywh {425 70 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 minimum 1 maximum 9 step 1 value 1
+          code0 {strcpy(o->theformat,"%1.0f");}
+          class Rueda
+        }
+      }
+      Fl_Counter PresetSelect {
+        label Preset
+        callback {ready = 2;}
+        xywh {20 550 60 25} type Simple box BORDER_BOX selection_color 0 labelfont 1 labelcolor 5 align 1 minimum 0 maximum 40 step 1 textfont 1 textcolor 5
+      }
+      Fl_Input Pname {
+        xywh {95 535 255 40} box BORDER_BOX color 6 labelfont 1 labelcolor 7 when 1 textsize 22 textcolor 5
+      }
+      Fl_Group {} {
+        label Filter open
+        xywh {10 170 480 95} box BORDER_BOX color 138 labelfont 1 labelcolor 5
+      } {
+        Fl_Dial D_Ftype {
+          label Type
+          callback {D_Ftype_c=1;}
+          xywh {20 190 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 maximum 8 step 1
+          code0 {strcpy(o->theformat,"%1.0f");}
+          class Rueda
+        }
+        Fl_Dial D_Fgain {
+          label Gain
+          callback {D_Fgain_c=1;}
+          xywh {80 190 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 step 0.01 value 0.5
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_Fcutoff {
+          label Cutoff
+          callback {D_Fcutoff_c=1;}
+          xywh {140 190 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 minimum 21 maximum 10020 step 0.1 value 5020.5
+          code0 {strcpy(o->theformat,"%5.1f");}
+          class Rueda
+        }
+        Fl_Dial D_Fq {
+          label Resonance
+          callback {D_Fq_c=1;}
+          xywh {200 190 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 minimum -1 step 0.01
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_FLFO {
+          label LFO
+          callback {D_FLFO_c=1;}
+          xywh {260 190 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 step 0.01
+          code0 {strcpy(o->theformat,"%1.2f");}
+          class Rueda
+        }
+        Fl_Dial D_FADSR {
+          label ADSR
+          callback {D_FADSR_c=1;}
+          xywh {320 190 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 maximum 6 step 1
+          code0 {strcpy(o->theformat,"%1.0f");}
+          class Rueda
+        }
+        Fl_Dial D_Fstages {
+          label Stages
+          callback {D_Fstages_c=1;}
+          xywh {380 190 50 60} box FLAT_BOX color 138 labelsize 11 labelcolor 7 align 1 minimum 1 maximum 5 step 1 value 1
+          code0 {strcpy(o->theformat,"%1.0f");}
+          class Rueda
+        }
+        Fl_Button D_Fvelocity {
+          label Velocity
+          callback {D_Fvelocity_c = 1;}
+          xywh {435 240 50 20} type Toggle box PLASTIC_UP_BOX selection_color 3 labelsize 11 when 1
+        }
+        Fl_Box Flabel {
+          xywh {435 173 50 34} labelsize 10 labelcolor 7 align 144
+        }
+      }
+    }
+    Fl_Window BankWindow {
+      label {goomf - Bank}
+      callback {o->hide();} open
+      xywh {1386 142 800 600} type Double color 138 selection_color 7 hide resizable size_range {640 480 3200 2400}
+    } {
+      Fl_Menu_Bar MenuB {open
+        xywh {0 0 800 20} down_box DOWN_BOX color 138 selection_color 7 labelcolor 7 textcolor 7
+      } {
+        Submenu ArchivoB {
+          label {&File}
+          xywh {10 10 100 20} labelcolor 7
+        } {
+          MenuItem NewB {
+            label New
+            callback {ready=4;}
+            xywh {0 0 45 26} divider
+          }
+          MenuItem Load_Bank {
+            label {Load Bank}
+            callback {char *filename;
+filename=fl_file_chooser("Browse:","(*.goomf)",DATADIR,0);
+if (filename==NULL) return;
+filename=fl_filename_setext(filename,".goomf");
+setBankFile->copy_label(filename);
+strcpy(uBankFilename,filename);
+ready=1;}
+            xywh {10 10 45 26}
+          }
+          MenuItem Save_Bank {
+            label {Save Bank}
+            callback {char *filename;
+filename=fl_file_chooser("Browse:","(*.goomf)","",0);
+if (filename==NULL) return;
+filename=fl_filename_setext(filename,".goomf");
+setBankFile->copy_label(filename);
+strcpy(uBankFilename,filename);
+ready=3;}
+            xywh {10 10 45 26} divider
+          }
+          MenuItem salirB {
+            label Close
+            callback {BankWindow->do_callback();}
+            xywh {12 12 36 21} labelcolor 7
+          }
+        }
+      }
+      Fl_Group ob {open
+        xywh {0 20 800 580} labelsize 18
+      } {}
+    }
+  }
+  Function {tick(void* v)} {return_type {static void}
+  } {
+    code {Fl_Box *o = (Fl_Box*)v;
+o->do_callback();
+Fl::repeat_timeout(1.0 * 0.04,tick,v);} {}
+  }
+} 

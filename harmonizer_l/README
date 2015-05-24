@@ -1,0 +1,88 @@
+holharm_l 0.1.0 
+<c> 2008-2009 by Josep Andreu
+=============================
+
+holharm try to be a smart harmonizer LADSPA plugin using the smbPitchShifther
+engine available on http://www.dspdimension.com in periods of 128 frames.
+
+holharm use double harmonizer engine, you can define the interval for each channel.
+
+
+harmonizer engine quality can be changed on the GUI by the user, unfortunatelly to
+take changes effect you need restart the plugin. But ... CAREFULLY holharm
+makes hard use of your CPU. My recomentation is:
+
+p3 or similar 		 Poor
+p4 or similar 		 Fine
+Dual Core or similar     Good 
+
+Off course that can be change if you have a really tuned computer, for
+example I can use Fine on my p3 933.
+
+If you change the Quality value and your CPU cant afford that, jackd will 
+crash when you start holharm, please read the Known Issues section to solve
+that.
+
+
+MODE OPERATION
+===============
+
+holharm has two mode operation:
+
+Mode Normal
+===========
+
+The interval is fixed by the user in the GUI and runs as a normal harmonizer, usefull to
+change song key, or do some crazy things.
+
+Mode Selected
+=============
+
+(Use ONLY if the input audio signal is a monophonic signal (single voice, single
+flute ...)
+
+In this mode holharm analyzes the input audio signal and try to recognize the musical note, 
+then adjust the interval, using the Intervals, Note and Chord Type selected
+by the user on the GUI.
+
+This is usefull to harmonize small parts of a song that use the same chord.
+
+Known Issues
+============
+
+- In Selected Mode, holharm use the schmitt algorithm to analyze
+ the input audio data for recognize notes, and is not perfect, holharm 
+ discards many of the algorith return values until has a reasonable result.
+ That produces a delay betwen the harmonized voices and the input signal,
+ that is not so bad in most cases, anyway if the input audio data is detuned,
+ is really hard to recognize notes, then is really important to use a clean/tuned 
+ audio input data.
+
+- If you have selected a great Quality and your CPU is not capable to afford
+  that, the jack server will be stopped each time you start holharm, to
+  solve that remove the file /home/"youruser"/.holharm or edit by hand using
+  the values:
+
+  4 for Poor
+  8 for Fine
+  16 for Good
+
+  That means: on the first line of the file .. put a 4 or 8 or 16 value.
+  Save and restart the plugin.
+
+
+
+That's all folks.
+
+Josep
+
+
+
+
+
+
+
+
+
+
+   

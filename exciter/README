@@ -1,0 +1,29 @@
+exciter 0.1.0 
+<c> 2008-2009 by Josep Andreu
+=============================
+
+Based on the fantastic harmonic LADSPA plugin of Steve Harris, this plugin
+try to be a smart exciter helped with MIDI chord info, appling this info to
+the harmonic magnitudes. Off course if no MIDI info is comming you can use
+it as a plain exciter.
+
+The way of this magnitudes are changed with the MIDI chord info ... is
+right now experimental ... and sure need to be revised.
+
+Of course ... this dynamic changes can not be applied on non
+harmonic/melodic sounds, instruments like drums and more specific like Hi
+Hat, Ride, Crash .... because hi not dependes of the chord harmony and
+you can obtain behavoir results. For this kind of sounds you need to use
+this plugin like a plain exciter.
+
+
+Josep
+
+
+
+
+  
+
+
+
+   
